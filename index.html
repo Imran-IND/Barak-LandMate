@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Barak LandMate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Raleway:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* splash screen */
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0078D7, #00A4E4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Raleway', sans-serif;
+    color: #fff;
+    font-size: 2.5em;
+    font-weight: bold;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Animation for splash text */
+#splash-screen span {
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    animation: fadeInZoom 1s ease-in-out forwards;
+}
+
+@keyframes fadeInZoom {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* General body and container styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+}
+
+.container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 900px;
+    width: 90%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.input-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.output-section {
+    flex: 1;
+    max-width: 300px;
+    padding: 15px;
+    background: #f0f0f0;
+    border-radius: 5px;
+}
+
+.output-list {
+    list-style: none;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.output-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+h1 {
+    font-size: 1.5em;
+    color: #0078D7;
+    text-align: center;
+    margin: 0 0 10px;
+}
+
+h2 {
+    font-size: 1.2em;
+    color: #0078D7;
+    margin: 0 0 10px;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-around;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    background-color: #0078D7;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #005bb5;
+}
+
+button:disabled {
+    background-color: #b3d4fc;
+    cursor: not-allowed;
+}
+
+.reset-btn {
+    background-color: #f44336;
+}
+
+.reset-btn:hover {
+    background-color: #d32f2f;
+}
+
+.result {
+    text-align: center;
+    font-size: 1.2em;
+    color: #444;
+    margin-top: 20px;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: #fff;
+    background-color: #0078D7;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Responsive Design */
+@media (max-width: 800px) {
+    .container {
+        flex-direction: column;
+    }
+    .output-section {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.2em;
+    }
+
+    button {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    .input-section {
+        padding: 15px;
+    }
+}
+  </style>
+</head>
+<body>
+  <div id="splash-screen">
+    <span>Barak LandMate</span>
+  </div>
+
+  <div class="container">
+    <div class="input-section">
+      <h1>Barak LandMate</h1>
+      <div class="input-group">
+        <label for="hectare">Hectare:</label>
+        <input type="text" id="hectare" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="acre">Acre:</label>
+        <input type="text" id="acre" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="bigha">Bigha:</label>
+        <input type="text" id="bigha" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="katha">Katha:</label>
+        <input type="text" id="katha" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="chatak">Chatak:</label>
+        <input type="text" id="chatak" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="gonda">Gonda:</label>
+        <input type="text" id="gonda" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="kora">Kora:</label>
+        <input type="text" id="kora" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="input-group">
+        <label for="kanti">Kanti:</label>
+        <input type="text" id="kanti" placeholder="0" 
+               oninput="this.value = this.value.match(/^\d+(\.\d{0,})?$/) ? this.value : this.value.replace(/[^\d]/g, '')">
+      </div>
+      <div class="button-container">
+        <button id="add-btn" onclick="addValues()">Add Values</button>
+        <button id="convert-btn" onclick="directcal()">Convert</button>
+        <button id="calculate-btn" onclick="calculate()">Calculate Total</button>
+        <button class="reset-btn" onclick="resetFields()">Reset</button>
+      </div>
+      <div class="result" id="result"></div>
+    </div>
+    <div class="output-section">
+      <h2>Input History</h2>
+      <ul id="input-history" class="output-list"></ul>
+    </div>
+  </div>
+
+  <footer>
+    Designed and Developed by<br>
+    Hussain Muhammad Imran<br>
+    District Consultant, ILRMS<br>
+    District Administration Cachar
+  </footer>
+
+  <script>
+    let totalBigha = 0, totalKatha = 0, totalChatak = 0, totalGonda = 0, totalKora = 0, totalKanti = 0;
+    let totalHectare = 0, totalAcre = 0;
+    let inputHistory = [];
+
+    function disableOtherButtons(exceptBtnId) {
+      const buttons = ['add-btn', 'convert-btn'];
+      buttons.forEach(id => {
+        if (id !== exceptBtnId) {
+          document.getElementById(id).disabled = true;
+        }
+      });
+    }
+
+    function enableButtons() {
+      document.getElementById('add-btn').disabled = false;
+      document.getElementById('convert-btn').disabled = false;
+      document.getElementById('calculate-btn').disabled = false;
+    }
+
+    function convertHectareToLowerUnits() {
+      let hectare = parseFloat(document.getElementById('hectare').value) || 0;
+      if (hectare > 0) {
+        let bighaFromHectare = hectare * 7.47; // 1 Hectare = 7.47 Bigha
+        convertBighaToLowerUnits(bighaFromHectare);
+      }
+    }
+
+    function convertAcreToLowerUnits() {
+      let acre = parseFloat(document.getElementById('acre').value) || 0;
+      if (acre > 0) {
+        let bighaFromAcre = acre * 3.025; // 1 Acre = 3.025 Bigha
+        convertBighaToLowerUnits(bighaFromAcre);
+      }
+    }
+
+    function convertBighaToLowerUnits(bigha) {
+      let totalBigha = Math.floor(bigha);
+      let remainingBigha = bigha - totalBigha;
+      let totalKatha = Math.floor(remainingBigha * 20); // 1 Bigha = 20 Katha
+      let remainingKatha = (remainingBigha * 20) - totalKatha;
+      let totalChatak = Math.floor(remainingKatha * 16); // 1 Katha = 16 Chatak
+      let remainingChatak = (remainingKatha * 16) - totalChatak;
+      let totalGonda = Math.floor(remainingChatak * 20); // 1 Chatak = 20 Gonda
+      let remainingGonda = (remainingChatak * 20) - totalGonda;
+      let totalKora = Math.floor(remainingGonda * 4); // 1 Gonda = 4 Kora
+      let remainingKora = (remainingGonda * 4) - totalKora;
+      let totalKanti = Math.floor(remainingKora * 3); // 1 Kora = 3 Kanti
+      document.getElementById('bigha').value = totalBigha;
+      document.getElementById('katha').value = totalKatha;
+      document.getElementById('chatak').value = totalChatak;
+      document.getElementById('gonda').value = totalGonda;
+      document.getElementById('kora').value = totalKora;
+      document.getElementById('kanti').value = totalKanti;
+    }
+
+    function addValues() {
+      disableOtherButtons('add-btn');
+      let hectare = parseInt(document.getElementById('hectare').value) || 0;
+      let acre = parseInt(document.getElementById('acre').value) || 0;
+      let bighaFromHectare = hectare * 7.47;
+      let bighaFromAcre = acre * 3.025;
+      let bigha = (parseInt(document.getElementById('bigha').value) || 0) + bighaFromHectare + bighaFromAcre;
+      let katha = parseInt(document.getElementById('katha').value) || 0;
+      let chatak = parseInt(document.getElementById('chatak').value) || 0;
+      let gonda = parseInt(document.getElementById('gonda').value) || 0;
+      let kora = parseInt(document.getElementById('kora').value) || 0;
+      let kanti = parseInt(document.getElementById('kanti').value) || 0;
+      totalBigha += bigha;
+      totalKatha += katha;
+      totalChatak += chatak;
+      totalGonda += gonda;
+      totalKora += kora;
+      totalKanti += kanti;
+      totalHectare += hectare;
+      totalAcre += acre;
+      addToHistory(bigha, katha, chatak, gonda, kora, kanti, hectare, acre);
+      resetInputFields();
+      document.getElementById('result').innerHTML = 
+        `Added Values - Bigha: ${totalBigha}, Katha: ${totalKatha}, Chatak: ${totalChatak}, Gonda: ${totalGonda}, Kora: ${totalKora}, Kanti: ${totalKanti}, Hectare: ${totalHectare}, Acre: ${totalAcre}`;
+    }
+
+    function calculate() {
+      let hectare = parseFloat(document.getElementById('hectare').value) || 0;
+      let acre = parseFloat(document.getElementById('acre').value) || 0;
+      if (hectare > 0) {
+        convertHectareToLowerUnits();
+      } 
+      if (acre > 0) {
+        convertAcreToLowerUnits();
+      }
+      totalKora += Math.floor(totalKanti / 3);
+      totalKanti = totalKanti % 3;
+      totalGonda += Math.floor(totalKora / 4);
+      totalKora = totalKora % 4;
+      totalChatak += Math.floor(totalGonda / 20);
+      totalGonda = totalGonda % 20;
+      totalKatha += Math.floor(totalChatak / 16);
+      totalChatak = totalChatak % 16;
+      totalBigha += Math.floor(totalKatha / 20);
+      totalKatha = totalKatha % 20;
+      let totalHectareCalc = (totalBigha / 7.47).toFixed(2);
+      let totalAcreCalc = (totalBigha / 3.025).toFixed(2);
+      let areaSqFt = 
+        (totalBigha * 14400) +
+        (totalKatha * 720) +
+        (totalChatak * 45) +
+        (totalGonda * 2.25) +
+        (totalKora * 0.05625) +
+        (totalKanti * 0.05625 / 3);
+      let areaSqM = (areaSqFt * 0.092903).toFixed(2);
+      document.getElementById('result').innerHTML = 
+        `Total: Bigha: ${totalBigha}, Katha: ${totalKatha}, Chatak: ${totalChatak}, Gonda: ${totalGonda}, Kora: ${totalKora}, Kanti: ${totalKanti} <br>
+         Total Area: ${areaSqFt.toFixed(2)} sq. ft <br>
+         Total Area: ${areaSqM} sq. m <br>
+         Hectare: ${totalHectareCalc} <br>
+         Acre: ${totalAcreCalc}`;
+    }
+
+    function directcal() {
+      disableOtherButtons('convert-btn');
+      let hectare = parseFloat(document.getElementById('hectare').value) || 0;
+      let acre = parseFloat(document.getElementById('acre').value) || 0;
+      let bigha = 0;
+      if (hectare > 0) {
+        bigha = hectare * 7.47;
+      } 
+      if (acre > 0) {
+        bigha = acre * 3.025;
+      }
+      bigha += parseFloat(document.getElementById('bigha').value) || 0;
+      let katha = parseFloat(document.getElementById('katha').value) || 0;
+      let chatak = parseFloat(document.getElementById('chatak').value) || 0;
+      let gonda = parseFloat(document.getElementById('gonda').value) || 0;
+      let kora = parseFloat(document.getElementById('kora').value) || 0;
+      let kanti = parseFloat(document.getElementById('kanti').value) || 0;
+      let bighaWhole = Math.floor(bigha);
+      let bighaFraction = bigha - bighaWhole;
+      katha += bighaFraction * 20;
+      let kathaWhole = Math.floor(katha);
+      let kathaFraction = katha - kathaWhole;
+      chatak += kathaFraction * 16;
+      let chatakWhole = Math.floor(chatak);
+      let chatakFraction = chatak - chatakWhole;
+      gonda += chatakFraction * 20;
+      let gondaWhole = Math.floor(gonda);
+      let gondaFraction = gonda - gondaWhole;
+      kora += gondaFraction * 4;
+      let koraWhole = Math.floor(kora);
+      let koraFraction = kora - koraWhole;
+      kanti += Math.round(koraFraction * 3);
+      let totalHectareCalc = (bigha / 7.47).toFixed(2);
+      let totalAcreCalc = (bigha / 3.025).toFixed(2);
+      let areaSqFt = 
+        (bighaWhole * 14400) +
+        (kathaWhole * 720) +
+        (chatakWhole * 45) +
+        (gondaWhole * 2.25) +
+        (koraWhole * 0.05625) +
+        (kanti * 0.05625 / 3);
+      let areaSqM = (areaSqFt * 0.092903).toFixed(2);
+      document.getElementById('result').innerHTML = 
+        `Converted Values: Bigha: ${bighaWhole}, Katha: ${kathaWhole}, Chatak: ${chatakWhole}, Gonda: ${gondaWhole}, Kora: ${koraWhole}, Kanti: ${Math.floor(kanti)} <br>
+         Total Area: ${areaSqFt.toFixed(2)} sq. ft <br>
+         Total Area: ${areaSqM} sq. m <br>
+         Hectare: ${totalHectareCalc} <br>
+         Acre: ${totalAcreCalc}`;
+    }
+
+    function resetInputFields() {
+      document.getElementById('hectare').value = '';
+      document.getElementById('acre').value = '';   
+      document.getElementById('bigha').value = '';
+      document.getElementById('katha').value = '';
+      document.getElementById('chatak').value = '';
+      document.getElementById('gonda').value = '';
+      document.getElementById('kora').value = '';
+      document.getElementById('kanti').value = '';
+    }
+
+    function addToHistory(bigha, katha, chatak, gonda, kora, kanti, hectare, acre) {
+      inputHistory.push({bigha, katha, chatak, gonda, kora, kanti, hectare, acre});
+      renderHistory();
+    }
+
+    function renderHistory() {
+      const ul = document.getElementById('input-history');
+      ul.innerHTML = '';
+      inputHistory.forEach((entry, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `Entry ${index + 1} - Bigha: ${entry.bigha}, Katha: ${entry.katha}, Chatak: ${entry.chatak}, Gonda: ${entry.gonda}, Kora: ${entry.kora}, Kanti: ${entry.kanti}, Hectare: ${entry.hectare}, Acre: ${entry.acre}`;
+        ul.appendChild(li);
+      });
+    }
+
+    function resetFields() {
+      totalBigha = 0;
+      totalKatha = 0;
+      totalChatak = 0;
+      totalGonda = 0;
+      totalKora = 0;
+      totalKanti = 0;
+      totalHectare = 0;
+      totalAcre = 0;
+      inputHistory = [];
+      resetInputFields();
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('input-history').innerHTML = '';
+      enableButtons();
+    }
+
+    window.onload = function() {
+      setTimeout(function() {
+        document.getElementById('splash-screen').classList.add('hidden');
+        document.querySelector('.container').classList.add('visible');
+      }, 3000);
+
+      // Disable right-click
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+    // Disable common DevTools shortcuts
+    document.addEventListener('keydown', function(e) {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+        (e.ctrlKey && e.key === 'U')
+      ) {
+        e.preventDefault();
+      }
+    });
+
+    // Detect DevTools opening (basic method)
+    (function() {
+      const devtools = /./;
+      devtools.toString = function() {
+        alert('Developer tools are disabled on this page.');
+        return '';
+      };
+      setInterval(function() {
+        console.log('%c', devtools);
+      }, 1000);
+    })();
+    }
+  </script>
+</body>
+</html>
